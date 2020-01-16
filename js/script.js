@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var scene = new THREE.Scene();
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
@@ -37,103 +36,60 @@ let cubeEdges = [
 ];
 
 //Creating empty arrays for grouping and targeting objects
- let edge=[];
- let sphere=[];
- let edges=[];
- let spheres=[];
- let endShape=[];
- // Geometry creation functions
- let controls = new function() {
-     this.addCube= function() {
-         let finalCube=[];
-         (function createEdge() { // Edges creation func
-=======
-// Creating the main scene
-window.addEventListener('load', init);
-function init() {
-    var scene = new THREE.Scene();
+let edge=[];
+let sphere=[];
+let edges=[];
+let spheres=[];
+let endShape=[];
+// Geometry creation functions
+let controls = new function() {
+    this.addCube= function() {
+        let finalCube=[];
+        (function createEdge() { // Edges creation func
+            for (let i = 0; i < cubeEdges.length; i++) {
+                let edgeGeometry = new THREE.Geometry();
+                edgeGeometry.vertices.push(new THREE.Vector3(cubeEdges[i][0][0], cubeEdges[i][0][1], cubeEdges[i][0][2]));
+                edgeGeometry.vertices.push(new THREE.Vector3(cubeEdges[i][1][0], cubeEdges[i][1][1], cubeEdges[i][1][2]));
+                let edgesMaterial = new THREE.LineBasicMaterial({color: 0x000000});
+                edge[i] = new THREE.Line(edgeGeometry, edgesMaterial);
+            }
+            edges.push(edge);
+            return edge;
 
-    // Creating a render and setting the size
-    var renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0xffffff,1.0);
-    document.body.appendChild(renderer.domElement);
+        })();
 
-    // Creating a camera with basic position
-    var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(-30, 30, 40);
-    camera.lookAt(scene.position);
+        (function createEdge() { //Spheres creation func
+            for (let i = 0; i < cubeVertex.length; i++) {
+                var sphereGeometry = new THREE.SphereGeometry(0.6, 32, 32);
+                sphere[i] = new THREE.Mesh(sphereGeometry);
+                sphere[i].position.set(cubeEdges[i][0][0], cubeEdges[i][0][1], cubeEdges[i][0][2]);
+                spheres.push(sphere[i]);
+            }
+            return sphere;
+        })();
 
-    // Creating the vertex' coordinates
-    let cubeVertex = [
-        [0, 0, 0], [0, 0, 5], [5, 0, 5], [5, 0, 0],
-        [0, 5, 0], [0, 5, 5], [5, 5, 5], [5, 5, 0]
-    ];
-    let cubeEdges = [
-        [cubeVertex[0], cubeVertex[1]],
-        [cubeVertex[1], cubeVertex[2]],
-        [cubeVertex[2], cubeVertex[3]],
-        [cubeVertex[3], cubeVertex[0]],
-        [cubeVertex[4], cubeVertex[5]],
-        [cubeVertex[5], cubeVertex[6]],
-        [cubeVertex[6], cubeVertex[7]],
-        [cubeVertex[7], cubeVertex[4]],
-        [cubeVertex[4], cubeVertex[0]],
-        [cubeVertex[5], cubeVertex[1]],
-        [cubeVertex[6], cubeVertex[2]],
-        [cubeVertex[7], cubeVertex[3]],
-    ];
- let edges = [];
- let spheres=[];
- let controls = new function() {
-     this.addCube= function() {
-         var edgeCreation = function(){
->>>>>>> 624c81f3c09103f5ff68b40a942b8655aa47c27f
-             for (let i = 0; i < cubeEdges.length; i++) {
-                 let edgeGeometry = new THREE.Geometry();
-                 edgeGeometry.vertices.push(new THREE.Vector3(cubeEdges[i][0][0], cubeEdges[i][0][1], cubeEdges[i][0][2]));
-                 edgeGeometry.vertices.push(new THREE.Vector3(cubeEdges[i][1][0], cubeEdges[i][1][1], cubeEdges[i][1][2]));
-                 let edgesMaterial = new THREE.LineBasicMaterial({color: 0x000000});
-<<<<<<< HEAD
-                 edge[i] = new THREE.Line(edgeGeometry, edgesMaterial);
-             }
-             edges.push(edge);
-             return edge;
+        //Assembling geometry into subgroups
 
-         })();
+        let edgeGroup = new THREE.Group();
+        let sphereGroup = new THREE.Group();
+        for(let n=0;n<edge.length;n++) {
+            edgeGroup.add(edge[n]);
+        }
+        for(let n=0;n<sphere.length;n++) {
+            sphereGroup.add(sphere[n]);
+        }
 
-         (function createEdge() { //Spheres creation func
-             for (let i = 0; i < cubeVertex.length; i++) {
-                 var sphereGeometry = new THREE.SphereGeometry(0.6, 32, 32);
-                 sphere[i] = new THREE.Mesh(sphereGeometry);
-                 sphere[i].position.set(cubeEdges[i][0][0], cubeEdges[i][0][1], cubeEdges[i][0][2]);
-                 spheres.push(sphere[i]);
-             }
-             return sphere;
-         })();
+        //Assembling subgroups in one group and setting random position
 
-         //Assembling geometry into subgroups
+        endShape = new THREE.Group();
+        endShape.add(edgeGroup);
+        endShape.add(sphereGroup);
+        endShape.position.set((Math.random()*10),(Math.random()*10),(Math.random()*10));
+        scene.add(endShape);
+        console.log(edges)
+    }
 
-         let edgeGroup = new THREE.Group();
-         let sphereGroup = new THREE.Group();
-         for(let n=0;n<edge.length;n++) {
-             edgeGroup.add(edge[n]);
-         }
-         for(let n=0;n<sphere.length;n++) {
-             sphereGroup.add(sphere[n]);
-         }
-
-         //Assembling subgroups in one group and setting random position
-
-         endShape = new THREE.Group();
-         endShape.add(edgeGroup);
-         endShape.add(sphereGroup);
-         endShape.position.set((Math.random()*10),(Math.random()*10),(Math.random()*10));
-         scene.add(endShape);
-         console.log(edges)
-     }
-
- }
+}
 
 //Adding GUI using google dat.gui
 
@@ -180,71 +136,3 @@ render();
 window.addEventListener( 'mousedown', onMouseMove, false );
 
 window.requestAnimationFrame(render);
-=======
-                 let edge = new THREE.Line(edgeGeometry, edgesMaterial);
-                 edges.push(edge)
-                 scene.add(edge)
-                 return edge
-             }
-         };
-         var sphereCreation = function(){
-             for (let i = 0; i < cubeVertex.length; i++) {
-                 var sphereGeometry = new THREE.SphereGeometry(0.6, 32, 32);
-                 let sphere = new THREE.Mesh(sphereGeometry);
-                 sphere.position.set(cubeEdges[i][0][0], cubeEdges[i][0][1], cubeEdges[i][0][2]);
-                 spheres.push(sphere)
-                 scene.add(sphere);
-                 return sphere
-             }
-         }
-         var cubeCreation = function() {
-             var edgesGroup = new THREE.Group();
-             var spheresGroup = new THREE.Group();
-             var finalCube = new THREE.Group();
-             for (let i = 0; i < edgeCreation.length; i++) {
-                 edgesGroup.add(edgeCreation[i])
-             }
-             for (let i = 0; i < sphereCreation.length; i++) {
-                 spheresGroup.add(sphereCreation[i])
-             }
-             for (let i = 0; i < edgeCreation.length; i++) {
-
-             }
-
-
-         }
-     }
-
- }
- var gui = new dat.GUI();
-
- gui.add(controls, 'addCube');
- render();
-
-
-    function render() {
-        requestAnimationFrame( render );
-        renderer.render( scene, camera );
-    }
-    render();
-}
-        // let targetList=[];
-        // var controls = new function() {
-        //     //Creating initial rotation
-        //     this.rotationSpeed = 0.005;
-        //     this.numberOfObjects = scene.children.length;
-        //
-        //     //Creating cubes' edges
-        //     this.addCube = function() {
-        //         // Creating edges of cube
-        //         var cubeCreation=()=> {
-        //
-        //             }
-        //             return edge;
-        //         }
-        //         // Creating spheres placed on cube's vertexes
-        //         var sphereCreation=()=>{
-        //
-        //             return sphere;
-        //         };
->>>>>>> 624c81f3c09103f5ff68b40a942b8655aa47c27f
